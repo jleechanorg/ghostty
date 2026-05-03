@@ -61,7 +61,10 @@ class DockTilePlugin: NSObject, NSDockTilePlugIn {
             .publisher(for: .ghosttyIconDidChange)
             .map { [weak self] _ in self?.ghosttyUserDefaults?.appIcon }
             .receive(on: DispatchQueue.global())
-            .sink { [weak self] newIcon in self?.iconDidChange(newIcon, dockTile: dockTile) }
+            .sink { [weak self] newIcon in
+                guard let newIcon else { return }
+                self?.iconDidChange(newIcon, dockTile: dockTile)
+            }
     }
 
     private func iconDidChange(_ newIcon: AppIcon?, dockTile: NSDockTile) {
