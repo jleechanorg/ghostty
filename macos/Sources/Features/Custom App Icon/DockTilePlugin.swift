@@ -129,15 +129,12 @@ class DockTilePlugin: NSObject, NSDockTilePlugIn {
 }
 
 private extension NSDockTile {
-    func setIcon(_ newIcon: NSImage) {
-        // Update the Dock tile on the main thread.
-        DispatchQueue.main.async {
-            let iconView = NSImageView(frame: CGRect(origin: .zero, size: self.size))
-            iconView.wantsLayer = true
-            iconView.image = newIcon
-            self.contentView = iconView
-            self.display()
-        }
+    @MainActor func setIcon(_ newIcon: NSImage) {
+        let iconView = NSImageView(frame: CGRect(origin: .zero, size: self.size))
+        iconView.wantsLayer = true
+        iconView.image = newIcon
+        self.contentView = iconView
+        self.display()
     }
 }
 
