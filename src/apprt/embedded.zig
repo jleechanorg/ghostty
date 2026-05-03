@@ -1577,6 +1577,23 @@ pub const CAPI = struct {
         return surface.newSurfaceOptions(source);
     }
 
+    /// Get the current working directory of the surface's terminal.
+    /// Returns 0 on success (pwd copied to buf, null-terminated), -1 on error.
+    /// If the terminal has no pwd (not yet started or unknown), returns -1.
+    export fn ghostty_surface_pwd(
+        surface: *Surface,
+        buf: [*]u8,
+        buflen: usize,
+    ) c_int {
+        const pwd_opt = surface.core_surface.pwd(surface.core_surface.alloc) catch return -1;
+        const pwd = pwd_opt orelse return -1;
+        defer surface.core_surface.alloc.free(pwd);
+        if (pwd.len >= buflen) return -1;
+        @memcpy(buf[0..pwd.len], pwd);
+        buf[pwd.len] = 0;
+        return 0;
+    }
+
     /// Update the configuration to the provided config for only this surface.
     export fn ghostty_surface_update_config(
         surface: *Surface,
