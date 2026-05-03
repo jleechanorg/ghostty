@@ -79,7 +79,9 @@ class DockTilePlugin: NSObject, NSDockTilePlugIn {
             NSWorkspace.shared.noteFileSystemChanged(appBundlePath)
         }
 
-        dockTile.setIcon(appIcon)
+        DispatchQueue.main.async {
+            dockTile.setIcon(appIcon)
+        }
     }
 
     /// Reset the application icon and dock tile icon to the default.
@@ -124,7 +126,9 @@ class DockTilePlugin: NSObject, NSDockTilePlugIn {
         if let appBundlePath {
             NSWorkspace.shared.noteFileSystemChanged(appBundlePath)
         }
-        dockTile.setIcon(appIcon)
+        DispatchQueue.main.async {
+            dockTile.setIcon(appIcon)
+        }
     }
 }
 
